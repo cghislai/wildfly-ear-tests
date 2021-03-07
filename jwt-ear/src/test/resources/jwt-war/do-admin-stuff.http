@@ -1,0 +1,8 @@
+POST {{jwtWarUri}}/
+Authorization: Bearer {{keycloakToken}}
+Accept: application/json
+
+
+> {%
+client.assert(response.status === 200);
+%}

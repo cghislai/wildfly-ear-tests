@@ -1,0 +1,23 @@
+version: '3.6'
+
+services:
+
+  wildfly:
+    image: jboss/wildfly:22.0.1.Final
+    command:
+      - '/opt/jboss/wildfly/bin/standalone.sh'
+      - '--server-config=standalone-full.xml'
+      - '-b'
+      - '0.0.0.0'
+    environment:
+      - 'JAVA_TOOL_OPTIONS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8787"'
+      - 'mp.jwt.verify.publickey=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAm8pN5DkYkR1oGukQ2c7f/GcIBCXcMxw91qtImgnvGTk/OqvEsnz4HTF0uXrJX00GGENbY7A+hGpcBQtkJqR6lPG3sJxFIvh+I5JeAnvDNWF/jvPTIfuH1E+zGOtQk32K9dVVbiybBqWoSOPnQY+2UIDIusxQKzMzTPU7DhEFt6WEW2fe+3DcD8x9zfelfsrWZfuTdHGd1KWYjiWe4DDazWNumS/aktNQkCUGwCeMoQJxgHSuU6plSfBTXSkyrwXU+VMiB50ZKmNXfLRCNx58ZKV1RDl7hl2oCCE2toPlUyZ4nyfh4+Y4yZPpfVIOJGWDZKLG38jfpc5iqneBrui1lwIDAQAB'
+      - 'mp.jwt.verify.issuer=https://auth.paperasse.local/realms/paperasse'
+    volumes:
+      - ./jwt-ear/target/jwt-ear.ear:/opt/jboss/wildfly/standalone/deployments/jwt-ear.ear
+    ports:
+      - 18080:8080 # http
+      - 18443:8443 # https
+      - 19990:9990 # admin interface
+      - 18787:8787 # debugger
+
